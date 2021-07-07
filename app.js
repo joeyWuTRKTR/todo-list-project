@@ -23,7 +23,7 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.get('/', (req, res) => {
-  app.render('index')
+  res.render('index')
 })
 
 app.listen(3000, () => {
