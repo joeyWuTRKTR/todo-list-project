@@ -1,6 +1,7 @@
 const express = require('express') // include express
 const mongoose = require('mongoose') // include mongoose
 const exphbs = require('express-handlebars')
+const Todo = require('./models/todo')
 const app = express()
 
 // connect to mongoose
@@ -23,7 +24,10 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.get('/', (req, res) => {
-  res.render('index')
+  Todo.find() // find data from database
+    .lean()  // transfer data into js
+    .then(todos => res.render( 'index', { todos })) // render template
+    .catch(error => console.log(error)) // show the error
 })
 
 app.listen(3000, () => {
