@@ -4,6 +4,10 @@ const todoSchema = new Schema({
   name: {
     type: String,
     required: true
+  },
+  isDone: {
+    type: Boolean,
+    default: true
   }
 })
 module.exports = mongoose.model('Todo', todoSchema)

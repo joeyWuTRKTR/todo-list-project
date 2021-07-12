@@ -66,10 +66,11 @@ app.get('/todos/:id/edit', (req, res) => {
 
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name, isDone } = req.body
   return Todo.findById(id) // find data from mongoDB(module exported from todo.js)
     .then(todo => {  // if query successed, store data
       todo.name = name
+      todo.isDone = isDone === 'on'
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`)) // if store successed, return index page
