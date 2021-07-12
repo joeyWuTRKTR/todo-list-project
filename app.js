@@ -3,6 +3,7 @@ const mongoose = require('mongoose') // include mongoose
 const exphbs = require('express-handlebars')
 const Todo = require('./models/todo')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override') // include method-override
 const app = express()
 
 // connect to mongoose
@@ -25,6 +26,7 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method')) // use method-override 
 
 app.get('/', (req, res) => {
   Todo.find() // find data from database
@@ -65,7 +67,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body // catch the name of input
   return Todo.findById(id) // find data from mongoDB(module exported from todo.js)
@@ -79,7 +81,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // Delete
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove()) // remove the data
