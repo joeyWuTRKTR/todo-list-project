@@ -5,7 +5,7 @@ const todoSchema = new Schema({
     type: String,
     required: true
   },
-  isDone: {
+  isDone: { // define what the checkbox default is 
     type: Boolean,
     default: true
   }
