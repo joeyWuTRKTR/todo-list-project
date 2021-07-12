@@ -7,7 +7,7 @@ const todoSchema = new Schema({
   },
   isDone: { // define what the checkbox default is 
     type: Boolean,
-    default: true
+    default: false
   }
 })
 module.exports = mongoose.model('Todo', todoSchema)
