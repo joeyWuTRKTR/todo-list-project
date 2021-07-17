@@ -1,9 +1,8 @@
-const express = require('express')
-const Schema = express.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-const userSchema = new Schema {
-
-  firstName: {
+const userSchema = new Schema ({
+  nameame: {
     type: String,
     required: true
   },
@@ -22,6 +21,6 @@ const userSchema = new Schema {
     type: Date,
     default: Date.now
   }
-}
+})
 
 module.exports = mongoose.model('User', userSchema)

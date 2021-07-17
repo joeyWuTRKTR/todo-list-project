@@ -14,7 +14,12 @@ router.get('/index', (req, res) => {
     .catch(error => console.log(error)) // show the error
 })
 
-// Login
+// get login
+router.get('/login', (req, res) => {
+  return res.render('login')
+})
+
+// login
 router.post('/login', (req, res) => {
   const email = req.body.email
   const password = req.body.password
@@ -41,8 +46,7 @@ router.post('/login', (req, res) => {
         })
       } else {
         const name = user[0].firstName
-        res.cookie('username', name)
-        return res.render('login', { name })
+        return res.render('welcome', { name })
       }
     })
     .catch(error => console.log(error))
