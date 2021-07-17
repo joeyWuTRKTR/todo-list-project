@@ -1,9 +1,57 @@
 // include express and express router
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 
 const Todo = require('../../models/todo')
 
+// index
+router.get('/index', (req, res) => {
+  Todo.find() // find data from database
+    .lean()  // transfer data into js
+    .sort({ _id: 'asc' }) // ascending data into the database
+    .then(todos => res.render('index', { todos })) // render template
+    .catch(error => console.log(error)) // show the error
+})
+
+// Login
+router.post('/login', (req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login'
+  })
+
+  User.find()
+    .lean()
+    .then(user => {
+      let validUser = user.some(user => user.email === email)
+      let correctPassword = user.some(user => user.email === email && user.password === password)
+
+      if (!validUser) {
+        return res.render('login', { no_user: `<small class="text-danger">Invalid user!</small>` })
+      }
+
+      else if (validUser && !correctPassword) {
+        return res.render('login', {
+          no_user: `<small class="text-success">Invalid user!</small>`,
+          wrong_password: `<small class="text-danger">Wrong Password!</small>`
+        })
+      } else {
+        const name = user[0].firstName
+        res.cookie('username', name)
+        return res.render('login', { name })
+      }
+    })
+    .catch(error => console.log(error))
+})
+
+// Register
+router.get('/register', (req, res) => {
+  return res.render('register')
+})
 
 // Create
 router.get('/new', (req, res) => {
@@ -11,10 +59,10 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  const name = req.body.name  // take "name" from req.body
-  const todo = new Todo({ name })
-  return todo.save() // store in database
-    .then(() => res.redirect('/')) // finish creation, lead to index
+  const names = String(req.body.name).split(',')  // transfer the array in to string, split by comma
+  const name = names.map(todo => ({ name: todo })) // map strings with objectXarray
+  Todo.insertMany(name)
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
