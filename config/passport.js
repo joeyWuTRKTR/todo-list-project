@@ -30,7 +30,6 @@ module.exports = app => {
   // 3. Sessions: serialize & deserialize => 節省 session 空間
   // 序列化 => 用使用者資料查id
   passport.serializeUser((user, done) => {
-    console.log(user)
     done(null, user.id)
   })
   // 反序列化 => 用id查使用者資料

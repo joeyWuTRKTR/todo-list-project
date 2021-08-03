@@ -16,6 +16,11 @@ router.get('/register', (req, res) => {
   res.render('register')
 })
 
+router.get('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/users/login')
+})
+
 router.post('/register', (req, res) => {
   const { name, email, password, confirmPassword } = req.body
   // 檢查使用者是否已經註冊
