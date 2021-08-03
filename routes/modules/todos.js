@@ -20,17 +20,20 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  const names = String(req.body.name).split(',')  // transfer the array in to string, split by comma
-  const name = names.map(todo => ({ name: todo })) // map strings with objectXarray
-  Todo.insertMany(name)
+  const userId = req.user._id
+  const name = req.body.name
+  return Todo.create({ name, userId })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
 // Read
 router.get('/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id) // seach by id
+  const userId = req.user._id
+  const _id = req.params.id
+  // 找出id一樣的資料，比對資料和user
+  // findOne不會轉換id & _id，只有findById才會自動轉換
+  return Todo.findOne({ _id, userId })
     .lean()
     .then((todo) => res.render('detail', { todo }))
     .catch(error => console.log(error))
@@ -38,30 +41,33 @@ router.get('/:id', (req, res) => {
 
 // Edit
 router.get('/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
+  const userId = req.user._id
+  const _id = req.params.id
+  return Todo.findOne({ _id, userId })
     .lean()
     .then(todo => res.render('edit', { todo }))
     .catch(error => console.log(error))
 })
 
 router.put('/:id', (req, res) => {
-  const id = req.params.id
+  const userId = req.user._id
+  const _id = req.params.id
   const { name, isDone } = req.body // catch the name of input
-  return Todo.findById(id) // find data from mongoDB(module exported from todo.js)
+  return Todo.findOne({ _id, userId }) // find data from mongoDB(module exported from todo.js)
     .then(todo => {  // if query successed, store data
       todo.name = name
       todo.isDone = isDone === 'on' // boolean return true or false
       return todo.save()
     })
-    .then(() => res.redirect(`/todos/${id}`)) // if store successed, return index page
+    .then(() => res.redirect(`/todos/${_id}`)) // if store successed, return index page
     .catch(error => console.log(error))
 })
 
 // Delete
 router.delete('/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
+  const userId = req.user._id
+  const _id = req.params.id
+  return Todo.findOne({ _id, userId })
     .then(todo => todo.remove()) // remove the data
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))

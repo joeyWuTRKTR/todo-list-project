@@ -8,6 +8,12 @@ const todoSchema = new Schema({
   isDone: { // define what the checkbox default is 
     type: Boolean,
     default: false
+  },
+  userId: { // 加入關聯設定
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    required: true
   }
 })
 module.exports = mongoose.model('Todo', todoSchema)
