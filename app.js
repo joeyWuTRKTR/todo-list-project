@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override') // include method-override
 const session = require('express-session')
+const usePassport = require('./config/passport')
 
 const routes = require('./routes') // include routes
 require('./config/mongoose')
@@ -17,9 +18,11 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method')) // use method-override 
 app.use(session({ 
   secret: "awesomeSecret",
-  save: false,
+  resave: false,
   saveUninitialized: true
 }))
+
+usePassport(app)
 
 app.use(routes) // import routes from modules(index.js)
 

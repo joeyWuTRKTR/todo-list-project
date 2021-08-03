@@ -14,49 +14,6 @@ router.get('/index', (req, res) => {
     .catch(error => console.log(error)) // show the error
 })
 
-// get login
-router.get('/login', (req, res) => {
-  return res.render('login')
-})
-
-// login
-router.post('/login', (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
-
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/users/login'
-  })
-
-  User.find()
-    .lean()
-    .then(user => {
-      let validUser = user.some(user => user.email === email)
-      let correctPassword = user.some(user => user.email === email && user.password === password)
-
-      if (!validUser) {
-        return res.render('login', { no_user: `<small class="text-danger">Invalid user!</small>` })
-      }
-
-      else if (validUser && !correctPassword) {
-        return res.render('login', {
-          no_user: `<small class="text-success">Invalid user!</small>`,
-          wrong_password: `<small class="text-danger">Wrong Password!</small>`
-        })
-      } else {
-        const name = user[0].firstName
-        return res.render('welcome', { name })
-      }
-    })
-    .catch(error => console.log(error))
-})
-
-// Register
-router.get('/register', (req, res) => {
-  return res.render('register')
-})
-
 // Create
 router.get('/new', (req, res) => {
   return res.render('new')
