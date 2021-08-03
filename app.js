@@ -23,7 +23,12 @@ app.use(session({
 }))
 
 usePassport(app)
-
+// 設定本地變數res.locals，讓所有樣板使用
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user // 來自sessions的反序列化
+  next()
+})
 app.use(routes) // import routes from modules(index.js)
 
 app.listen(PORT, () => {
