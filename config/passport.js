@@ -1,5 +1,6 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+const FacebookStrategy = require('passport-facebook').Strategy
 const bcrypt = require('bcryptjs')
 
 const User = require('../models/user')
@@ -28,6 +29,16 @@ module.exports = app => {
         })
       })
       .catch(err => console.log(err))
+  }))
+
+  // Facebook 第三方登入
+  passport.use(new FacebookStrategy({
+    clientID: 'id',
+    clientSecret: 'secret',
+    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    profileFields: ['email', 'displayName']
+  }, (accessToken, refreshToken, profile, done) => {
+    console.log(profile)
   }))
 
   // 3. Sessions: serialize & deserialize => 節省 session 空間
