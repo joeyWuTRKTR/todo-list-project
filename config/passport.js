@@ -33,13 +33,15 @@ module.exports = app => {
 
   // Facebook 第三方登入
   passport.use(new FacebookStrategy({
-    clientID: 'id',
-    clientSecret: 'secret',
+    clientID: '413967663374245',
+    clientSecret: 'cc1a5ab27297607ba2d1ed7d15d6dafc',
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['email', 'displayName']
-  }, (accessToken, refreshToken, profile, done) => {
-    console.log(profile)
-  }))
+  }, 
+    (accessToken, refreshToken, profile, done) => {
+      console.log(profile)
+    }
+  ))
 
   // 3. Sessions: serialize & deserialize => 節省 session 空間
   // 序列化 => 用使用者資料查id
